@@ -32,6 +32,7 @@
 		2C36ECEC2790BB0000DDD300 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C36ECEB2790BB0000DDD300 /* CalendarCollectionViewCell.swift */; };
 		2C3BB1F92795E87300E22DA6 /* NewWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BB1F82795E87300E22DA6 /* NewWorkoutViewController.swift */; };
 		2C6E7F8F2794307400183C4B /* WorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6E7F8E2794307400183C4B /* WorkoutTableViewCell.swift */; };
+		2C8AD49B27A45B73008C22E6 /* OkCanselAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8AD49A27A45B73008C22E6 /* OkCanselAlert.swift */; };
 		2C97443327916C15002D2BE1 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C97443127916C15002D2BE1 /* Roboto-Bold.ttf */; };
 		2C97443427916C15002D2BE1 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C97443227916C15002D2BE1 /* Roboto-Medium.ttf */; };
 		2CFD758C2799D7EC00E24A15 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 2CFD758B2799D7EC00E24A15 /* Realm */; };
@@ -67,6 +68,7 @@
 		2C36ECEB2790BB0000DDD300 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		2C3BB1F82795E87300E22DA6 /* NewWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutViewController.swift; sourceTree = "<group>"; };
 		2C6E7F8E2794307400183C4B /* WorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTableViewCell.swift; sourceTree = "<group>"; };
+		2C8AD49A27A45B73008C22E6 /* OkCanselAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkCanselAlert.swift; sourceTree = "<group>"; };
 		2C97443127916C15002D2BE1 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		2C97443227916C15002D2BE1 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2CFD758F2799DAA500E24A15 /* WorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutModel.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				2C017CC3279F4484005640F2 /* OkAlert.swift */,
+				2C8AD49A27A45B73008C22E6 /* OkCanselAlert.swift */,
 			);
 			path = Alerts;
 			sourceTree = "<group>";
@@ -167,8 +170,8 @@
 		2C36ECDA27909DBB00DDD300 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2C26EC1227A03E7500131E0A /* TimeStartWorkoutVC */,
 				2C26EC0B27A037F100131E0A /* RepsStartWorkoutVC */,
+				2C26EC1227A03E7500131E0A /* TimeStartWorkoutVC */,
 				2C017CC2279F4466005640F2 /* Alerts */,
 				2C3BB1FA2795EB8700E22DA6 /* NewWorkoutVC */,
 				2C36ECE82790B30000DDD300 /* MainVC */,
@@ -349,6 +352,7 @@
 				2C3238AB27972131009A507B /* ProfileViewController.swift in Sources */,
 				2C36ECE527909F1C00DDD300 /* UIColor + Extentions.swift in Sources */,
 				2C017CC4279F4484005640F2 /* OkAlert.swift in Sources */,
+				2C8AD49B27A45B73008C22E6 /* OkCanselAlert.swift in Sources */,
 				2C36ECC227909B3E00DDD300 /* AppDelegate.swift in Sources */,
 				2C017CC1279F3CB7005640F2 /* RealmManager.swift in Sources */,
 				2C36ECC427909B3E00DDD300 /* SceneDelegate.swift in Sources */,
