@@ -6,6 +6,10 @@
 //
 
 import UIKit
+protocol NextSetProtocol : AnyObject {
+    func nextSetTapped()
+    
+}
 
 class RepsView : UIView {
     
@@ -28,9 +32,21 @@ class RepsView : UIView {
         addSubview(editingButton)
         addSubview(subRepsLineView)
         addSubview(subSetsLineView)
+        
+        repsStackView = UIStackView(arrangedSubviews: [repsLabel,numberRepsLabel],
+                    axis: .horizontal,
+                    spacing: 10)
+        setStackView = UIStackView(arrangedSubviews: [setLabel,numberSetLabel],
+                    axis: .horizontal,
+                    spacing: 10)
+        addSubview(setStackView)
+        addSubview(repsStackView)
+        
     }
+    var setStackView = UIStackView()
+    var repsStackView = UIStackView()
     
-    private let traningLabel: UILabel = {
+        let traningLabel: UILabel = {
        let label = UILabel()
         label.text = "Name of traning"
         label.adjustsFontSizeToFitWidth = true
@@ -81,13 +97,51 @@ class RepsView : UIView {
         return view
     }()
     
+    private let setLabel: UILabel = {
+       let label = UILabel()
+        label.text = "Sets"
+        label.font = .robotoMedium18()
+        label.textColor = #colorLiteral(red: 0.3913812339, green: 0.3912524879, blue: 0.3872336149, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let repsLabel: UILabel = {
+       let label = UILabel()
+        label.text = "Reps"
+        label.font = .robotoMedium18()
+        label.textColor = #colorLiteral(red: 0.3913812339, green: 0.3912524879, blue: 0.3872336149, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+     let numberSetLabel: UILabel = {
+       let label = UILabel()
+        label.text = "1/4"
+        label.font = .robotoMedium24()
+        label.textColor = #colorLiteral(red: 0.3913812339, green: 0.3912524879, blue: 0.3872336149, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+     let numberRepsLabel: UILabel = {
+       let label = UILabel()
+        label.text = "20"
+        label.font = .robotoMedium24()
+        label.textColor = #colorLiteral(red: 0.3913812339, green: 0.3912524879, blue: 0.3872336149, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    weak var cellNextDeligate: NextSetProtocol?
+    
     @objc private func editingButtomTapped(){
         print("Editing Buttom Tapped")
         
     }
     
     @objc private func nextSetButtonTapped(){
-        print("Next Set Button Tapped")
+        cellNextDeligate?.nextSetTapped()
         
     }
     
@@ -121,6 +175,18 @@ class RepsView : UIView {
             subSetsLineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
             subSetsLineView.heightAnchor.constraint(equalToConstant: 1),
             subSetsLineView.bottomAnchor.constraint(equalTo: subRepsLineView.topAnchor, constant: -60)
+        ])
+        NSLayoutConstraint.activate([
+            repsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            repsStackView.bottomAnchor.constraint(equalTo: subRepsLineView.topAnchor, constant: 0),
+            repsStackView.heightAnchor.constraint(equalToConstant: 30),
+            repsStackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9)
+        ])
+        NSLayoutConstraint.activate([
+            setStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            setStackView.bottomAnchor.constraint(equalTo: subSetsLineView.topAnchor, constant: 0),
+            setStackView.heightAnchor.constraint(equalToConstant: 30),
+            setStackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9)
         ])
     }
     

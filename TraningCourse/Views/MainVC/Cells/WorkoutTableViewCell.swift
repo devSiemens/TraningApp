@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol StartWorkoutProtocol: AnyObject {
+    func startButtonTapped(model: WorkoutModel)
+}
+
 class WorkoutTableViewCell: UITableViewCell {
 
     private let workoutCell : UIView = {
@@ -35,6 +39,7 @@ class WorkoutTableViewCell: UITableViewCell {
        let label = UILabel()
         label.text = "Pull Ups"
         label.font = .robotoMedium24()
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = .specialDarkGreen
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -72,10 +77,11 @@ class WorkoutTableViewCell: UITableViewCell {
     }()
     
     @objc private func startButtonTapped(){
-        print("Start button tapped")
+        cellStartWorkoutDeligate?.startButtonTapped(model: workoutModel)
     }
     
     func cellConfigure(model:WorkoutModel) {
+        workoutModel = model
         workoutNameLabel.text = model.workoutName
         let (min,sec) = {(secs: Int) -> (Int,Int) in
             return (secs  / 60, secs % 60) }(model.workoutTimer)
@@ -85,6 +91,18 @@ class WorkoutTableViewCell: UITableViewCell {
         guard let imageData = model.workoutImage else {return}
         guard let image = UIImage(data: imageData) else {return}
         traningImage.image = image
+        
+        if model.statusButton {
+            startButton.setTitle("COMPLETE", for: .normal)
+            startButton.backgroundColor = .specialGreen
+            startButton.tintColor = .white
+            startButton.isEnabled = false
+        } else {
+            startButton.setTitle("START", for: .normal)
+            startButton.backgroundColor = .specialYellow
+            startButton.tintColor = .specialDarkGreen
+            startButton.isEnabled = true
+        }
     }
     
         
@@ -95,6 +113,10 @@ class WorkoutTableViewCell: UITableViewCell {
         setConstrains()
         
     }
+    
+    var workoutModel = WorkoutModel()
+    
+    weak var cellStartWorkoutDeligate: StartWorkoutProtocol?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -124,7 +146,7 @@ class WorkoutTableViewCell: UITableViewCell {
             workoutNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             workoutNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 100),
             workoutNameLabel.heightAnchor.constraint(equalToConstant: 26),
-            workoutNameLabel.widthAnchor.constraint(equalToConstant: 90)
+            workoutNameLabel.widthAnchor.constraint(equalToConstant: 150)
         ])
         NSLayoutConstraint.activate([
             repsNumberLabel.topAnchor.constraint(equalTo: workoutNameLabel.bottomAnchor, constant: 5),

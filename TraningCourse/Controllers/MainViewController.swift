@@ -30,7 +30,15 @@ class MainViewController: UIViewController {
         label.minimumScaleFactor = 0.5
         return label
     }()
-    
+//    private func mainPresent(){
+//        if tableView.visibleCells.isEmpty{
+//            noTraningImage.isHidden = false
+//            tableView.isHidden = true
+//        }else {
+//            noTraningImage.isHidden = true
+//            tableView.isHidden = false
+//        }
+//    }
     let tableView: UITableView = {
        let tableView = UITableView()
         tableView.backgroundColor = .none
@@ -91,6 +99,7 @@ class MainViewController: UIViewController {
     private func setDeligates() {
         tableView.delegate = self
         tableView.dataSource = self
+        calendarView.cellCollectionViewDeligate = self
     }
     private func  setupViews() {
         view.backgroundColor = .specialBackground
@@ -117,6 +126,7 @@ class MainViewController: UIViewController {
         setDeligates()
         getWorkouts(date: Date())
         tableView.register(WorkoutTableViewCell.self, forCellReuseIdentifier: idWorkoutTableViewCell)
+//        mainPresent()
     }
 
     @objc private func addWorkoutButtonTapped() {
@@ -127,9 +137,17 @@ class MainViewController: UIViewController {
     
     private func getWorkouts(date: Date){
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.weekday], from: date)
+        let formatter = DateFormatter()
+        let components = calendar.dateComponents([.weekday,.day,.month,.year], from: date)
         guard let weekday = components.weekday else {return}
-        let dateStart = date
+        guard let day = components.day else {return}
+        guard let month = components.month else {return}
+        guard let year = components.year else {return}
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        
+        guard let dateStart = formatter.date(from: "\(year)/\(month)/\(day) 00:00") else {return}
+        
         let dateEnd: Date = {
             let components = DateComponents(day: 1, second: -1)
             return Calendar.current.date(byAdding: components, to: dateStart) ?? Date()
@@ -144,6 +162,28 @@ class MainViewController: UIViewController {
         
     }
 }
+
+//MARK: - StartWorkoutProtocol
+extension MainViewController: StartWorkoutProtocol{
+    func startButtonTapped(model: WorkoutModel) {
+     
+        if model.workoutTimer == 0 {
+            let repsStartWorkoutViewController = RepsStartWorkoutViewController()
+            repsStartWorkoutViewController.modalPresentationStyle = .fullScreen
+            repsStartWorkoutViewController.workoutModel = model
+            present(repsStartWorkoutViewController, animated: true)
+        } else{
+            let timeStartWorkoutViewController = TimeStartWorkoutViewController()
+            timeStartWorkoutViewController.modalPresentationStyle = .fullScreen
+            timeStartWorkoutViewController.workoutModel = model
+            present(timeStartWorkoutViewController, animated: true)
+        }
+        
+    }
+    
+    
+}
+
 //MARK: - UITableViewDataSource
 extension MainViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,15 +194,40 @@ extension MainViewController: UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: idWorkoutTableViewCell, for: indexPath) as! WorkoutTableViewCell
         let model = workoutArray[indexPath.row]
         cell.cellConfigure(model: model)
+        cell.cellStartWorkoutDeligate = self
         return cell
     }
     
     
 }
+
+//MARK: - SelectCollectionViewItemProtocol
+extension MainViewController: SelectCollectionViewItemProtocol {
+    func selectDate(date: Date) {
+        getWorkouts(date: date)
+    }
+    
+    
+}
 //MARK: -UITableViewDelegate
-extension MainViewController:UITableViewDelegate{
+extension MainViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         100
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let action = UIContextualAction(style: .destructive, title: "") { _, _, _ in
+            let deleteModel = self.workoutArray[indexPath.row]
+            RealmManager.shared.deleteWorkoutModel(model: deleteModel)
+            tableView.reloadData()
+        }
+        
+        action.backgroundColor = .specialBackground
+        action.image = UIImage(named: "delete")
+        
+        return UISwipeActionsConfiguration(actions: [action])
     }
 }
 

@@ -13,6 +13,8 @@ class TimeStartWorkoutViewController : UIViewController {
         super.viewDidLoad()
         setupView()
         setConstraints()
+        setTimerWorkoutParameters()
+        setDeligate()
     }
     
     private func setupView(){
@@ -26,7 +28,9 @@ class TimeStartWorkoutViewController : UIViewController {
         view.addSubview(timerLabel)
     }
     
-   
+    private func setDeligate() {
+        timerView.cellNextTimeDeligate = self 
+    }
     
     private let startWorkoutLabel: UILabel = {
        let label = UILabel()
@@ -82,12 +86,20 @@ class TimeStartWorkoutViewController : UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .specialGreen
         button.layer.cornerRadius = 10
+        button.addShadowOnView()
         button.addTarget(self, action: #selector(finishButtonTapped), for: .touchUpInside)
         return button
     }()
     
     @objc private func finishButtonTapped() {
-        print("Finish button tapped")
+        if numberOfSet == workoutModel.workoutSet {
+            dismiss(animated: true)
+            RealmManager.shared.updateWorkoutModel(model: workoutModel, bool: true)
+        }else{
+            canselOkAlert(title: "Warning", massage: "Your traning isn't finished") {
+                self.dismiss(animated: true)
+            }
+        }
     }
     
     @objc private func closeButtonTap() {
@@ -95,6 +107,37 @@ class TimeStartWorkoutViewController : UIViewController {
     }
     
     private let timerView = TimerView()
+    
+    private var numberOfSet = 1
+    
+    private func setTimerWorkoutParameters() {
+        timerView.traningLabel.text = workoutModel.workoutName
+        timerView.numberSetLabel.text = "\(numberOfSet) / \(workoutModel.workoutSet)"
+
+        let (min,sec) = {(secs: Int) -> (Int,Int) in
+            return (secs  / 60, secs % 60) }(workoutModel.workoutTimer)
+        timerView.numberTimeLabel.text = "\(min) min \(sec) sec"
+        timerLabel.text = "\(min):\(sec)"
+       
+    }
+    
+    var workoutModel = WorkoutModel()
+}
+    //MARK: -NextTimeSetProtocol
+extension TimeStartWorkoutViewController: NextTimeSetProtocol{
+    func nextTimeSetTapped() {
+        if numberOfSet < workoutModel.workoutSet{
+            numberOfSet += 1
+            timerView.numberSetLabel.text = "\(numberOfSet) / \(workoutModel.workoutSet)"
+        }else{
+            okAlert(title: "Finish", massage: "Your traning is end")
+        }
+      }
+    }
+
+
+//MARK: -setConstraints
+extension TimeStartWorkoutViewController{
     
     private func setConstraints(){
         NSLayoutConstraint.activate([
@@ -138,8 +181,7 @@ class TimeStartWorkoutViewController : UIViewController {
             timerLabel.centerYAnchor.constraint(equalTo: ellipseImage.centerYAnchor),
             timerLabel.heightAnchor.constraint(equalToConstant: 50),
             timerLabel.widthAnchor.constraint(equalToConstant: 245)
-        
         ])
     }
-    
 }
+

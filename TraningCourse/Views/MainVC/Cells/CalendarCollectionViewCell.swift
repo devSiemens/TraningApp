@@ -8,7 +8,7 @@
 import UIKit
 
 class CalendarCollectionViewCell: UICollectionViewCell {
-    private let dayOfWeekLabel: UILabel = {
+    let dayOfWeekLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "we"
@@ -17,7 +17,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         return label
     }()
-    private let numberOfDayLabel: UILabel = {
+    let numberOfDayLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "22"
@@ -40,6 +40,9 @@ class CalendarCollectionViewCell: UICollectionViewCell {
             }
         }
     }
+    
+   
+    
     override init(frame:CGRect){
         super .init(frame: frame)
         setupViews()

@@ -98,7 +98,7 @@ class NewWorkoutViewController: UIViewController {
         setConstraints()
         setDeligate()
         addTap()
-        
+        addSlide()
     }
     
     @objc private func closeButtonTap() {
@@ -106,7 +106,6 @@ class NewWorkoutViewController: UIViewController {
     }
     
     @objc private func saveButtonTapped() {
-        print("Tapped on save button")
         setModel()
         saveModel()
     }
@@ -130,12 +129,22 @@ class NewWorkoutViewController: UIViewController {
     }
     
     private func addTap(){
-        let tapScreen = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        let tapScreen = UITapGestureRecognizer(target: self, action: #selector(tapHideKeyboard))
+        tapScreen.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapScreen)
+    }
+    
+    private func addSlide(){
+        let tapScreen = UISwipeGestureRecognizer(target: self, action: #selector(swifeHideKeyboard))
         tapScreen.cancelsTouchesInView = false
         view.addGestureRecognizer(tapScreen)
     }
 
-    @objc private func hideKeyboard(){
+    @objc private func tapHideKeyboard(){
+        view.endEditing(true)
+    }
+    
+    @objc private func swifeHideKeyboard(){
         view.endEditing(true)
     }
     
