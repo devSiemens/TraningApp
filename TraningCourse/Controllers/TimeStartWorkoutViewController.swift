@@ -15,8 +15,11 @@ class TimeStartWorkoutViewController : UIViewController {
         setConstraints()
         setTimerWorkoutParameters()
         setDeligate()
+        addTaps()
     }
-    
+    override func viewDidLayoutSubviews() {
+        animationCircular()
+    }
     private func setupView(){
         view.backgroundColor = .specialBackground
         view.addSubview(startWorkoutLabel)
@@ -94,21 +97,23 @@ class TimeStartWorkoutViewController : UIViewController {
     @objc private func finishButtonTapped() {
         if numberOfSet == workoutModel.workoutSet {
             dismiss(animated: true)
-            RealmManager.shared.updateWorkoutModel(model: workoutModel, bool: true)
+            RealmManager.shared.updateStatusWorkoutModel(model: workoutModel, bool: true)
         }else{
             canselOkAlert(title: "Warning", massage: "Your traning isn't finished") {
                 self.dismiss(animated: true)
             }
         }
+        timer.invalidate()
     }
     
     @objc private func closeButtonTap() {
         dismiss(animated: true, completion: nil)
+        timer.invalidate()
     }
     
     private let timerView = TimerView()
     
-    private var numberOfSet = 1
+    private var numberOfSet = 0
     
     private func setTimerWorkoutParameters() {
         timerView.traningLabel.text = workoutModel.workoutName
@@ -116,15 +121,121 @@ class TimeStartWorkoutViewController : UIViewController {
 
         let (min,sec) = {(secs: Int) -> (Int,Int) in
             return (secs  / 60, secs % 60) }(workoutModel.workoutTimer)
+        if sec / 10 < 1 {
+            timerLabel.text = "\(min):0\(sec)"
+        }else{
+            timerLabel.text = "\(min):\(sec)"
+        }
         timerView.numberTimeLabel.text = "\(min) min \(sec) sec"
-        timerLabel.text = "\(min):\(sec)"
-       
+        durationTimer = workoutModel.workoutTimer
+    }
+    var timer = Timer()
+    var durationTimer = 5
+    let shapeLayer = CAShapeLayer()
+    
+    private func addTaps() {
+        let tapLabel = UITapGestureRecognizer(target: self, action: #selector(tapLabel))
+        timerLabel.isUserInteractionEnabled = true
+        timerLabel.addGestureRecognizer(tapLabel)
+    }
+    
+    @objc private func tapLabel() {
+            timerView.editingButton.isEnabled = false
+            timerView.nextSetButton.isEnabled = false
+            if numberOfSet == workoutModel.workoutSet {
+                okAlert(title: "Finish", massage: "Your traning is end")
+            }else {
+                basicAnimation()
+                timer = Timer.scheduledTimer(timeInterval: 1,
+                                             target: self,
+                                             selector: #selector(timerAction),
+                                             userInfo: nil,
+                                             repeats: true)
+        }
+    }
+    
+    
+    @objc private func timerAction() {
+            if durationTimer != 0 {
+                        durationTimer -= 1
+            }
+            print(durationTimer)
+        
+            if durationTimer == 0 {
+                timer.invalidate()
+                durationTimer = workoutModel.workoutTimer
+                numberOfSet += 1
+                timerView.numberSetLabel.text = "\(numberOfSet)/\(workoutModel.workoutSet)"
+                timerView.editingButton.isEnabled = true
+                timerView.nextSetButton.isEnabled = true
+            }
+            let (min,sec) = {(secs: Int) -> (Int,Int) in
+                return (secs  / 60, secs % 60) }(durationTimer)
+        if sec / 10 < 1 {
+                timerLabel.text = "\(min):0\(sec)"
+            }else{
+                timerLabel.text = "\(min):\(sec)"
+        }
     }
     
     var workoutModel = WorkoutModel()
+    let customAlert = CustomAlert()
+}
+//MARK: - Animation
+extension TimeStartWorkoutViewController{
+    private func animationCircular(){
+        
+        let center = CGPoint(x: ellipseImage.frame.width / 2, y: ellipseImage.frame.height / 2)
+        let endAngle = (-CGFloat.pi / 2)
+        let startAngle = 2 * CGFloat.pi + endAngle
+        
+        let circularPath = UIBezierPath(arcCenter: center,
+                                        radius: 115,
+                                        startAngle: startAngle,
+                                        endAngle: endAngle,
+                                        clockwise: false)
+        
+        shapeLayer.path = circularPath.cgPath
+        shapeLayer.lineWidth = 21
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.strokeEnd = 1
+        shapeLayer.lineCap = .round
+        shapeLayer.strokeColor = UIColor.specialGreen.cgColor
+        ellipseImage.layer.addSublayer(shapeLayer)
+        
+    }
+    
+    private func basicAnimation() {
+        let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        basicAnimation.toValue = 0
+        basicAnimation.duration = CFTimeInterval(durationTimer)
+        basicAnimation.fillMode = .forwards
+        basicAnimation.isRemovedOnCompletion = true
+        shapeLayer.add(basicAnimation, forKey: "basic animation")
+    }
 }
     //MARK: -NextTimeSetProtocol
 extension TimeStartWorkoutViewController: NextTimeSetProtocol{
+    func edditingTimerTapped() {
+        customAlert.alertCustom(viewController: self,repsOrTimer: "Timer of set (in sec)") { [self] sets, timer in
+            if sets != "" && timer != "" {
+            timerView.numberSetLabel.text = "\(numberOfSet)/\(sets)"
+            let (min,sec) = {(secs: Int) -> (Int,Int) in
+                return (secs  / 60, secs % 60) }(workoutModel.workoutTimer)
+            timerView.numberTimeLabel.text = "\(min) min \(sec) sec"
+                if sec / 10 < 1 {
+                    timerLabel.text = "\(min):0\(sec)"
+                }else{
+                    timerLabel.text = "\(min):\(sec)"
+            }
+            guard let numberOfSets = Int(sets) else { return }
+            guard let timeOfSet = Int(timer) else { return }
+            
+            RealmManager.shared.updateSetsTimerWorkoutModel(model: workoutModel, sets: numberOfSets, time: timeOfSet)
+            }
+        }
+    }
+    
     func nextTimeSetTapped() {
         if numberOfSet < workoutModel.workoutSet{
             numberOfSet += 1

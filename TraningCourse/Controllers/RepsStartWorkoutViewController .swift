@@ -83,7 +83,7 @@ class RepsStartWorkoutViewController: UIViewController {
     @objc private func finishButtonTapped() {
         if numberOfSet == workoutModel.workoutSet {
             dismiss(animated: true)
-            RealmManager.shared.updateWorkoutModel(model: workoutModel, bool: true)
+            RealmManager.shared.updateStatusWorkoutModel(model: workoutModel, bool: true)
         }else{
             canselOkAlert(title: "Warning", massage: "Your traning isn't finished") {
                 self.dismiss(animated: true)
@@ -95,7 +95,7 @@ class RepsStartWorkoutViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    private var numberOfSet = 1
+    private var numberOfSet = 0
     
     private func setRepsWorkoutParameters() {
         repsView.traningLabel.text = workoutModel.workoutName
@@ -106,8 +106,21 @@ class RepsStartWorkoutViewController: UIViewController {
     private let repsView = RepsView()
     
     var workoutModel = WorkoutModel()
+    let customAlert = CustomAlert()
 }
 extension RepsStartWorkoutViewController:NextSetProtocol{
+    func edditingTapped() {
+        customAlert.alertCustom(viewController: self,repsOrTimer: "Reps") { [self] sets, reps in
+            if sets != "" && reps != "" {
+            repsView.numberSetLabel.text = "\(numberOfSet)/\(sets)"
+            repsView.numberRepsLabel.text = reps
+            guard let numberOfSets = Int(sets) else { return }
+            guard let numberOfReps = Int(reps) else { return }
+            RealmManager.shared.updateSetsRepsWorkoutModel(model: workoutModel, sets: numberOfSets, reps: numberOfReps)
+            }
+        }
+    }
+    
     func nextSetTapped() {
         if numberOfSet < workoutModel.workoutSet{
             numberOfSet += 1

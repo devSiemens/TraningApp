@@ -8,6 +8,7 @@
 import UIKit
 protocol NextSetProtocol : AnyObject {
     func nextSetTapped()
+    func edditingTapped()
     
 }
 
@@ -136,7 +137,7 @@ class RepsView : UIView {
     weak var cellNextDeligate: NextSetProtocol?
     
     @objc private func editingButtomTapped(){
-        print("Editing Buttom Tapped")
+        cellNextDeligate?.edditingTapped()
         
     }
     

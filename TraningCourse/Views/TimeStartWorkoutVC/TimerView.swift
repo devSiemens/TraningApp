@@ -8,8 +8,8 @@
 import UIKit
 
 protocol NextTimeSetProtocol : AnyObject {
-
     func nextTimeSetTapped()
+    func edditingTimerTapped()
 }
 
 class TimerView : UIView {
@@ -58,7 +58,7 @@ class TimerView : UIView {
         return label
     }()
     
-    private let nextSetButton: UIButton = {
+     let nextSetButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("NEXT SET", for: .normal)
         button.tintColor = .specialGray
@@ -70,7 +70,7 @@ class TimerView : UIView {
         return button
     }()
     
-    private let editingButton : UIButton = {
+     let editingButton : UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "editing")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.setTitle("Editing", for: .normal)
@@ -109,7 +109,7 @@ class TimerView : UIView {
     
     private let repsLabel: UILabel = {
        let label = UILabel()
-        label.text = "Reps"
+        label.text = "Time of set"
         label.font = .robotoMedium18()
         label.textColor = #colorLiteral(red: 0.3913812339, green: 0.3912524879, blue: 0.3872336149, alpha: 1)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -135,15 +135,14 @@ class TimerView : UIView {
     }()
     
     weak var cellNextTimeDeligate: NextTimeSetProtocol?
+    let customAlert = CustomAlert()
     
     @objc private func editingButtomTapped(){
-        print("Editing Buttom Tapped")
-        
+        cellNextTimeDeligate?.edditingTimerTapped()
     }
     
     @objc private func nextSetButtonTapped(){
         cellNextTimeDeligate?.nextTimeSetTapped()
-        
     }
     
     private func setConstraints(){

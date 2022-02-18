@@ -31,6 +31,8 @@
 		2C36ECEA2790B31600DDD300 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C36ECE92790B31600DDD300 /* CalendarView.swift */; };
 		2C36ECEC2790BB0000DDD300 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C36ECEB2790BB0000DDD300 /* CalendarCollectionViewCell.swift */; };
 		2C3BB1F92795E87300E22DA6 /* NewWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BB1F82795E87300E22DA6 /* NewWorkoutViewController.swift */; };
+		2C45BAAD27A5738C0018F522 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C45BAAC27A5738C0018F522 /* Date + Extension.swift */; };
+		2C45BAB127A57EEE0018F522 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C45BAB027A57EEE0018F522 /* CustomAlert.swift */; };
 		2C6E7F8F2794307400183C4B /* WorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6E7F8E2794307400183C4B /* WorkoutTableViewCell.swift */; };
 		2C8AD49B27A45B73008C22E6 /* OkCanselAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8AD49A27A45B73008C22E6 /* OkCanselAlert.swift */; };
 		2C97443327916C15002D2BE1 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C97443127916C15002D2BE1 /* Roboto-Bold.ttf */; };
@@ -67,6 +69,8 @@
 		2C36ECE92790B31600DDD300 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		2C36ECEB2790BB0000DDD300 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		2C3BB1F82795E87300E22DA6 /* NewWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutViewController.swift; sourceTree = "<group>"; };
+		2C45BAAC27A5738C0018F522 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
+		2C45BAB027A57EEE0018F522 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		2C6E7F8E2794307400183C4B /* WorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		2C8AD49A27A45B73008C22E6 /* OkCanselAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkCanselAlert.swift; sourceTree = "<group>"; };
 		2C97443127916C15002D2BE1 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 			children = (
 				2C017CC3279F4484005640F2 /* OkAlert.swift */,
 				2C8AD49A27A45B73008C22E6 /* OkCanselAlert.swift */,
+				2C45BAB027A57EEE0018F522 /* CustomAlert.swift */,
 			);
 			path = Alerts;
 			sourceTree = "<group>";
@@ -197,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				2C36ECDD27909E0400DDD300 /* UIKit */,
+				2C45BAAC27A5738C0018F522 /* Date + Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -340,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C36ECE327909F0700DDD300 /* UIView + Extentions.swift in Sources */,
+				2C45BAAD27A5738C0018F522 /* Date + Extension.swift in Sources */,
 				2C0AB3772791A76B00A5D354 /* WaetherView.swift in Sources */,
 				2C3238A727971DEB009A507B /* MainTabBarController.swift in Sources */,
 				2C36ECC627909B3E00DDD300 /* MainViewController.swift in Sources */,
@@ -350,6 +357,7 @@
 				2C3238A32796D77A009A507B /* DateAndRepeatView.swift in Sources */,
 				2CFD75902799DAA500E24A15 /* WorkoutModel.swift in Sources */,
 				2C3238AB27972131009A507B /* ProfileViewController.swift in Sources */,
+				2C45BAB127A57EEE0018F522 /* CustomAlert.swift in Sources */,
 				2C36ECE527909F1C00DDD300 /* UIColor + Extentions.swift in Sources */,
 				2C017CC4279F4484005640F2 /* OkAlert.swift in Sources */,
 				2C8AD49B27A45B73008C22E6 /* OkCanselAlert.swift in Sources */,

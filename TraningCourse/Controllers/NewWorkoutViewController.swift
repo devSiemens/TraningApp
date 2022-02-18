@@ -151,11 +151,8 @@ class NewWorkoutViewController: UIViewController {
     private func setModel(){
         guard let nameWorkout = nameTextField.text else {return}
         workoutModel.workoutName = nameWorkout
-        workoutModel.workoutDate = dateAndRepeatView.workoutDatePicker.date
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.weekday], from: dateAndRepeatView.workoutDatePicker.date)
-        guard let weekday = components.weekday else {return}
-        workoutModel.workoutNumberOfDay = weekday
+        workoutModel.workoutDate = dateAndRepeatView.workoutDatePicker.date.localDate()
+        workoutModel.workoutNumberOfDay = dateAndRepeatView.workoutDatePicker.date.getWeekdayNumber()
         
         workoutModel.workoutRepeat = (dateAndRepeatView.repeatSwitch.isOn)
         workoutModel.workoutSet = Int(repsOrTimerView.setsSlider.value)
