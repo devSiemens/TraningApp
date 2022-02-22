@@ -13,6 +13,8 @@ class MainViewController: UIViewController {
     private let userPhotoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = #colorLiteral(red: 0.8044065833, green: 0.8044064641, blue: 0.8044064641, alpha: 1)
+        imageView.image = UIImage(named: "userPhoto")
+        imageView.clipsToBounds = true
         imageView.layer.borderWidth = 5
         imageView.layer.borderColor = UIColor.white.cgColor
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -23,22 +25,14 @@ class MainViewController: UIViewController {
         let label = UILabel()
         
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Vladislav Semenets"
+        label.text = "User Name"
         label.textColor = .specialGray
         label.font = .robotoMedium24()
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         return label
     }()
-//    private func mainPresent(){
-//        if tableView.visibleCells.isEmpty{
-//            noTraningImage.isHidden = false
-//            tableView.isHidden = true
-//        }else {
-//            noTraningImage.isHidden = true
-//            tableView.isHidden = false
-//        }
-//    }
+    
     let tableView: UITableView = {
        let tableView = UITableView()
         tableView.backgroundColor = .none
@@ -47,9 +41,9 @@ class MainViewController: UIViewController {
         tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delaysContentTouches = false
-//        tableView.isHidden = true
         return tableView
     }()
+    
     
     private let noTraningImage: UIImageView = {
        let imageView = UIImageView()
@@ -113,6 +107,17 @@ class MainViewController: UIViewController {
         view.addSubview(noTraningImage)
     }
     
+    private func checkTableView() {
+        if workoutArray.count == 0{
+            noTraningImage.isHidden = false
+            tableView.isHidden = true
+        }else{
+            noTraningImage.isHidden = true
+            tableView.isHidden = false
+            tableView.reloadData()
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -146,7 +151,7 @@ class MainViewController: UIViewController {
         
         workoutArray = localRealm.objects(WorkoutModel.self).filter(compound).sorted(byKeyPath: "workoutName")
         tableView.reloadData()
-        
+        checkTableView()
     }
 }
 

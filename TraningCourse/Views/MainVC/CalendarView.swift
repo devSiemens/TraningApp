@@ -57,6 +57,7 @@ extension CalendarView: UICollectionViewDataSource{
         let weekArray = dateTimeZone.getWeekArray()
         cell.cellConfigure(numberOfDay: weekArray[1][indexPath.item], dayOfWeek: weekArray[0][indexPath.item])
             
+        
             if indexPath.item == 6 {
                 collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .right)
             }
