@@ -29,9 +29,25 @@ class StatisticTableViewCell: UITableViewCell{
         addSubview(resultLabel)
     }
     
+    func cellConfigure(differenceWorkout: DifferenceWorkout) {
+        traningLabel.text = differenceWorkout.name
+        beforeLabel.text = "Before: \(differenceWorkout.firstReps)"
+        nowLabel.text = "Now: \(differenceWorkout.lastReps)"
+        
+        let difference = differenceWorkout.lastReps - differenceWorkout.firstReps
+        resultLabel.text = "\(difference)"
+        
+        switch difference {
+        case ..<0: resultLabel.textColor = .specialGreen
+        case 1...: resultLabel.textColor = .specialYellow
+        default:
+            resultLabel.textColor = .specialGray
+        }
+    }
+    
     var beforeNowStack = UIStackView()
     
-    private let traningLabel: UILabel = {
+    private var traningLabel: UILabel = {
        let label = UILabel()
         label.text = "Biceps"
         label.font = .robotoMedium24()
@@ -40,7 +56,7 @@ class StatisticTableViewCell: UITableViewCell{
         return label
     }()
     
-    private let beforeLabel: UILabel = {
+    private var beforeLabel: UILabel = {
        let label = UILabel()
         label.text = "Before: 18"
         label.textColor = #colorLiteral(red: 0.761189878, green: 0.7422975898, blue: 0.6815395951, alpha: 1)
@@ -50,7 +66,7 @@ class StatisticTableViewCell: UITableViewCell{
         return label
     }()
     
-    private let nowLabel: UILabel = {
+    private var nowLabel: UILabel = {
        let label = UILabel()
         label.text = "Now: 22"
         label.textColor = #colorLiteral(red: 0.761189878, green: 0.7422975898, blue: 0.6815395951, alpha: 1)
@@ -60,7 +76,7 @@ class StatisticTableViewCell: UITableViewCell{
         return label
     }()
     
-    private let resultLabel: UILabel = {
+    private  let resultLabel: UILabel = {
        let label = UILabel()
         label.text = "+3"
         label.textColor = .specialGreen
@@ -85,7 +101,7 @@ class StatisticTableViewCell: UITableViewCell{
             resultLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5),
             resultLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
             resultLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            resultLabel.widthAnchor.constraint(equalToConstant: 28)
+            resultLabel.widthAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

@@ -6,7 +6,14 @@
 //
 
 import UIKit
+import RealmSwift
 
+
+struct DifferenceWorkout {
+    let name: String
+    let lastReps: Int
+    let firstReps: Int
+}
 class StatisticViewController: UIViewController {
     
     override func viewDidLoad() {
@@ -25,8 +32,24 @@ class StatisticViewController: UIViewController {
         view.addSubview(exercisesLabel)
     }
     
+    private func setDeligate(){
+        staticTableView.dataSource = self
+        staticTableView.delegate = self
+    }
+    
+    var differenceArray = [DifferenceWorkout]()
     private let idStaticTableView = "idStaticTableView"
-   
+    private let staticTableViewCell = StatisticTableViewCell()
+    let localRealm = try! Realm()
+    var workoutArray: Results<WorkoutModel>!
+    
+    let dateToday = Date().localDate()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        staticTableView.reloadData()
+    }
+    
     private let segment: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Week","Month"])
         segment.translatesAutoresizingMaskIntoConstraints = false
@@ -45,17 +68,51 @@ class StatisticViewController: UIViewController {
         return segment
     }()
     
+    private func getWokoutName() -> [String]{
+        var nameArray = [String]()
+        workoutArray = localRealm.objects(WorkoutModel.self)
+        
+        for workoutModel in workoutArray {
+            if !nameArray.contains(workoutModel.workoutName) {
+                nameArray.append(workoutModel.workoutName)
+            }
+        }
+        return nameArray
+    }
     
     @objc private func segmentTapped(_ segmentedControl: UISegmentedControl){
-        switch segmentedControl.selectedSegmentIndex {
-        case 0:
-            print("week segment tapped")
-        case 1:
-            print("month segment tapped")
-        default:
-            print("none segment")
+        if segmentedControl.selectedSegmentIndex == 0 {
+            differenceArray = [DifferenceWorkout]()
+            let dateStart = dateToday.offsetDays(days: 7)
+            getDifferenceModel(dateStart: dateStart)
+            staticTableView.reloadData()
+        } else {
+            differenceArray = [DifferenceWorkout]()
+            let dateStart = dateToday.offsetMonth(month: 1)
+            getDifferenceModel(dateStart: dateStart)
+            staticTableView.reloadData()
         }
     }
+    
+    private func getDifferenceModel(dateStart: Date) {
+        
+        let dateEnd = Date().localDate()
+        let nameArray = getWokoutName()
+        
+        for name in nameArray {
+            
+            let predicateDifference = NSPredicate(format: "workoutName = '\(name)' AND workoutDate BETWEEN %@", [dateStart,dateEnd])
+            workoutArray = localRealm.objects(WorkoutModel.self).filter(predicateDifference).sorted(byKeyPath: "workoutDate")
+            
+            guard let last = workoutArray.last?.workoutReps ,
+                  let first = workoutArray.first?.workoutReps else {return}
+            
+            let differenceWorkout = DifferenceWorkout(name: name, lastReps: last, firstReps: first)
+            differenceArray.append(differenceWorkout)
+        }
+    }
+    
+    
     private let exercisesLabel: UILabel = {
        let label = UILabel()
         label.text = "Exercises"
@@ -76,11 +133,6 @@ class StatisticViewController: UIViewController {
         tableView.delaysContentTouches = false
         return tableView
     }()
-    
-    private func setDeligate(){
-        staticTableView.delegate = self
-        staticTableView.dataSource = self
-    }
     
     private let statisticsLabel: UILabel = {
        let label = UILabel()
@@ -123,11 +175,13 @@ class StatisticViewController: UIViewController {
 //MARK: - UITableViewDataSource
 extension StatisticViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        14
+        differenceArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: idStaticTableView, for: indexPath) as! StatisticTableViewCell
+        let differenceModel = differenceArray[indexPath.row]
+        cell.cellConfigure(differenceWorkout: differenceModel)
         return cell
     }
 }

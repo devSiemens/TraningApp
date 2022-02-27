@@ -45,7 +45,7 @@ class MainViewController: UIViewController {
     }()
     
     
-    private let noTraningImage: UIImageView = {
+    let noTraningImage: UIImageView = {
        let imageView = UIImageView()
         imageView.image = UIImage(named: "NoTraning")
         imageView.contentMode = .scaleAspectFit
@@ -75,7 +75,7 @@ class MainViewController: UIViewController {
     private let idWorkoutTableViewCell = "idWorkoutTableViewCell"
     
     private let localRealm = try! Realm()
-    private var workoutArray: Results<WorkoutModel>! = nil
+     var workoutArray: Results<WorkoutModel>! = nil
     
     override func viewDidLayoutSubviews() {
         userPhotoImageView.layer.cornerRadius = userPhotoImageView.frame.width / 2
@@ -107,7 +107,7 @@ class MainViewController: UIViewController {
         view.addSubview(noTraningImage)
     }
     
-    private func checkTableView() {
+    func checkTableView() {
         if workoutArray.count == 0{
             noTraningImage.isHidden = false
             tableView.isHidden = true
@@ -120,8 +120,7 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        tableView.reloadData()
+        checkTableView()
     }
     
     override func viewDidLoad() {
@@ -211,7 +210,7 @@ extension MainViewController: UITableViewDelegate {
         let action = UIContextualAction(style: .destructive, title: "") { _, _, _ in
             let deleteModel = self.workoutArray[indexPath.row]
             RealmManager.shared.deleteWorkoutModel(model: deleteModel)
-            tableView.reloadData()
+            self.checkTableView()
         }
         
         action.backgroundColor = .specialBackground

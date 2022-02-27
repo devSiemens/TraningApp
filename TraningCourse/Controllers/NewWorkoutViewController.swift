@@ -101,9 +101,12 @@ class NewWorkoutViewController: UIViewController {
         addSlide()
     }
     
+    private let mainVC = MainViewController()
+    
     @objc private func closeButtonTap() {
         dismiss(animated: true, completion: nil)
     }
+    
     
     @objc private func saveButtonTapped() {
         setModel()

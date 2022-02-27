@@ -17,8 +17,7 @@ class ProfileViewController: UIViewController{
     }
     
     private let localRealm = try! Realm()
-    private let userArray : Results<UserModel>! = nil
-    private let workoutArray: Results<WorkoutModel>! = nil
+    
     private func setupView(){
         view.backgroundColor = .specialBackground
         view.addSubview(profileLabel)
